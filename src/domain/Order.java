@@ -9,4 +9,18 @@ public class Order {
 	public Order(Cellphone phone) {
 		this.phone = phone;
 	}
+	
+	public Cellphone getCellphone() {
+		return phone;
+	}
+
+	public boolean isRefund() {
+		return refund;
+	}
+
+	public void setRefund(boolean refund) {
+		this.refund = refund;
+	}
+	
+	
 }
