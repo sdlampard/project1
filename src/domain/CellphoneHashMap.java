@@ -4,15 +4,32 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class CellphoneHashMap {
-
+	
+	private static CellphoneHashMap phoneHashMap = new CellphoneHashMap();
+	
 	private HashMap<Integer, Cellphone> phoneList;
 	
-	public CellphoneHashMap () {
+	private CellphoneHashMap () {
 		phoneList = new HashMap<> ();
+	}
+	
+	public static CellphoneHashMap getInstance() {
+		if( phoneHashMap == null) {
+			phoneHashMap = new CellphoneHashMap();
+		}
+		return phoneHashMap; 
 	}
 	
 	public void addCellphone(Cellphone phone) {
 		phoneList.put(phone.getRegiNum(), phone);
+	}
+	
+	
+	public Cellphone getCellphone(int regiNum) {
+		if(phoneList.containsKey(regiNum)) {
+			return phoneList.get(regiNum);
+		}
+		return null;
 	}
 	
 	public boolean removePhones(int regiNum) {

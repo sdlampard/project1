@@ -7,8 +7,8 @@ import service.Host;
 public class HostLogin implements Host{
 	
 	Scanner scan = new Scanner(System.in);
-	CellphoneHashMap phoneList = new CellphoneHashMap();
-	
+	CellphoneHashMap phoneList = CellphoneHashMap.getInstance();
+		
 	public boolean login(String id, String password) {
 		if(id.equals(ID) && password.equals(PASSWORD)) {
 			return true;
@@ -75,7 +75,7 @@ public class HostLogin implements Host{
 						}
 						break;
 					case 4: // 삭제
-						System.out.println("번호를 입력해주세요 : ");
+						System.out.print("번호를 입력해주세요 : ");
 						int delNum = scan.nextInt();
 						if(delNum != 0) {
 							if(phoneList.removePhones(delNum)) {
