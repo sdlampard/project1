@@ -1,46 +1,51 @@
 package oh.donghak.bookstore.java;
 
+import java.io.IOException;
 import java.util.Scanner;
 
-import domain.HostLogin;
-import domain.Member;
+import oh.donghak.bookstore.domain.CellphoneHashMap;
+import oh.donghak.bookstore.domain.HostLogin;
+import oh.donghak.bookstore.domain.MemberList;
+import oh.donghak.bookstore.domain.OrderList;
 
 public class Main {
-	public static void main(String[] args) {
+
+	static Scanner scan = new Scanner(System.in);
+	
+	public static  int login() {
+		int menu = 0;
+		System.out.println("--------------로그인2------------");
+		System.out.println("1.고객"+"\t"+"2.관리자"+"\t"+"3.회원가입"+"\t"+ "4.종료");
+		System.out.println("------------------------------");
+		System.out.print("메뉴번호를 입력하세요. : ");
+		String menuStr = scan.next();
+		try {
+			menu = Integer.parseInt(menuStr);
+		} catch (NumberFormatException e) {
+			System.out.println("숫자를 입력해주세요");
+		}
+		return menu;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		CellphoneHashMap phoneMap = CellphoneHashMap.getInstance();
+		OrderList orderList = OrderList.getInstance();
 		HostLogin host = new HostLogin();
-		Member member = new Member();
-		Customer customer = new Customer();
-		Scanner scan = new Scanner(System.in);
+		MemberList member = new MemberList();
+		
+		member.loadMemberList();
+		phoneMap.readFile();
+		orderList.readOrders();
+		
 		int menu = 0;
 		do {
-			System.out.println("--------------로그인------------");
-			System.out.println("1.고객"+"\t"+"2.관리자"+"\t"+"3.회원가입"+"\t"+ "4.종료");
-			System.out.println("------------------------------");
-			System.out.print("메뉴번호를 입력하세요. : ");
-			menu = scan.nextInt();
+			menu = login();
 			switch(menu) {
-			case 1:
-				System.out.print("고객 ID : ");
-				String customerId = scan.next();
-				System.out.print("고객 PW : ");
-				String customerPassword = scan.next();
-				if(member.login(customerId, customerPassword)) {
-					customer.menu();
-				}
+			case 1: // 고객 로그인
+				member.login();
 				break;
-			case 2:
-				System.out.print("관리자 ID : ");
-				String hostId = scan.next();
-				System.out.print("관리자 PW : ");
-				String hostPassword = scan.next();
-				if(host.login(hostId, hostPassword)) {
-					System.out.println("==================");
-					System.out.println("로그인 되었습니다.");
-					System.out.println("==================");
-					host.menu();
-				}else {
-					System.out.println("로그인 실패");
-				}
+			case 2: // 관리자 로그인
+				host.login();
 				break;
 			case 3: // 회원가입
 				member.addMember();
@@ -50,8 +55,9 @@ public class Main {
 			}
 		}while(menu != 4);
 		scan.close();
+		member.saveMemberList();
+		phoneMap.saveAllStacks();
+		orderList.saveOrders();
 		System.out.println("종료!");
-		
 	}
-
 }
