@@ -1,45 +1,54 @@
-package oh.donghak.bookstore.java;
+/*
+ * 작성일: 20191118
+ * 작성자: 오동학
+ * 개요: 메인
+ */
+package oh.donghak.cellphone.java;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import oh.donghak.bookstore.domain.CellphoneHashMap;
-import oh.donghak.bookstore.domain.HostLogin;
-import oh.donghak.bookstore.domain.MemberList;
-import oh.donghak.bookstore.domain.OrderList;
+import oh.donghak.cellphone.domain.CellphoneHashMap;
+import oh.donghak.cellphone.domain.HostLogin;
+import oh.donghak.cellphone.domain.MemberList;
+import oh.donghak.cellphone.domain.OrderList;
 
 public class Main {
 
 	static Scanner scan = new Scanner(System.in);
 	
-	public static  int login() {
+	// 로그인
+	public static int loginMenu() {
 		int menu = 0;
 		System.out.println("--------------로그인2------------");
 		System.out.println("1.고객"+"\t"+"2.관리자"+"\t"+"3.회원가입"+"\t"+ "4.종료");
-		System.out.println("------------------------------");
+		System.out.println("-------------------------------");
 		System.out.print("메뉴번호를 입력하세요. : ");
 		String menuStr = scan.next();
 		try {
 			menu = Integer.parseInt(menuStr);
 		} catch (NumberFormatException e) {
 			System.out.println("숫자를 입력해주세요");
+			System.out.println();
 		}
 		return menu;
 	}
 	
+	// 메뉴
 	public static void main(String[] args) throws IOException {
 		CellphoneHashMap phoneMap = CellphoneHashMap.getInstance();
 		OrderList orderList = OrderList.getInstance();
 		HostLogin host = new HostLogin();
 		MemberList member = new MemberList();
 		
+		// 파일 불러오기
 		member.loadMemberList();
 		phoneMap.readFile();
 		orderList.readOrders();
 		
 		int menu = 0;
 		do {
-			menu = login();
+			menu = loginMenu();
 			switch(menu) {
 			case 1: // 고객 로그인
 				member.login();
