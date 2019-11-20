@@ -2,16 +2,15 @@
  * 작성일: 20191118
  * 작성자: 오동학
  * 개요: 메인
+ * 수정일: 20191120
  */
 package oh.donghak.cellphone.java;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import oh.donghak.cellphone.domain.CellphoneHashMap;
 import oh.donghak.cellphone.domain.HostLogin;
 import oh.donghak.cellphone.domain.MemberList;
-import oh.donghak.cellphone.domain.OrderList;
 
 public class Main {
 
@@ -36,15 +35,13 @@ public class Main {
 	
 	// 메뉴
 	public static void main(String[] args) throws IOException {
-		CellphoneHashMap phoneMap = CellphoneHashMap.getInstance();
-		OrderList orderList = OrderList.getInstance();
-		HostLogin host = new HostLogin();
+		HostLogin host = HostLogin.getInstance();
 		MemberList member = new MemberList();
 		
 		// 파일 불러오기
 		member.loadMemberList();
-		phoneMap.readFile();
-		orderList.readOrders();
+		host.readFile();
+		host.readOrders();
 		
 		int menu = 0;
 		do {
@@ -64,9 +61,9 @@ public class Main {
 			}
 		}while(menu != 4);
 		scan.close();
+		host.saveAllStacks();
+		host.saveOrders();
 		member.saveMemberList();
-		phoneMap.saveAllStacks();
-		orderList.saveOrders();
 		System.out.println("종료!");
 	}
 }

@@ -14,13 +14,13 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import oh.donghak.cellphone.domain.Cellphone;
-import oh.donghak.cellphone.domain.CellphoneHashMap;
+import oh.donghak.cellphone.domain.HostLogin;
 import oh.donghak.cellphone.domain.Order;
-import oh.donghak.cellphone.domain.OrderList;
 
 public class Cart {
 	HashMap<Integer, Cellphone> list;
-	CellphoneHashMap phoneMap = CellphoneHashMap.getInstance();
+	
+	HostLogin host = HostLogin.getInstance();
 
 	Scanner scan = new Scanner(System.in);
 	
@@ -65,14 +65,16 @@ public class Cart {
 		
 		try {
 			// 수량 체크
-			if(phoneMap.getCellphone(regiNum).getAmount() < amount) {
+//			if(phoneMap.getCellphone(regiNum).getAmount() < amount) {
+			if(host.getCellphone(regiNum).getAmount() < amount) {
 				System.out.println("원하시는 수량이 재고 보다 많습니다.");
 				return;
 			}
 			
 			// 핸드폰 정보 가져오기
-			Cellphone newPhone = new Cellphone(phoneMap.getCellphone(regiNum).getRegiNum(),phoneMap.getCellphone(regiNum).getBrand(), phoneMap.getCellphone(regiNum).getModelName(), 
-					phoneMap.getCellphone(regiNum).getPrice(), amount);
+			Cellphone newPhone = new Cellphone(host.getCellphone(regiNum).getRegiNum(),
+					host.getCellphone(regiNum).getBrand(), host.getCellphone(regiNum).getModelName(), 
+					host.getCellphone(regiNum).getPrice(), amount);
 			// 카트에 추가
 			list.put(newPhone.getRegiNum(), newPhone);
 		} catch(NullPointerException e) {
@@ -98,7 +100,8 @@ public class Cart {
 		// 장바구니에 있나 확인
 		if(list.containsKey(num)) {
 			// 재고에 수량 돌려넣기
-			phoneMap.getCellphone(num).setAmount(phoneMap.getCellphone(num).getAmount() + list.get(num).getAmount());
+			host.getCellphone(num).setAmount(
+					host.getCellphone(num).getAmount() + list.get(num).getAmount());
 			
 			list.remove(num);
 			System.out.println("삭제 되었습니다.");
@@ -129,10 +132,10 @@ public class Cart {
 		
 		if(list.containsKey(num)) {
 			// 핸드폰 수량 빼오기
-			phoneMap.getCellphone(num).setAmount(phoneMap.getCellphone(num).getAmount() - list.get(num).getAmount());
+			host.getCellphone(num).setAmount(
+					host.getCellphone(num).getAmount() - list.get(num).getAmount());
 						
-			OrderList orderList = OrderList.getInstance();
-			orderList.addOrder(new Order(list.get(num),id));
+			host.addOrder(new Order(list.get(num),id));
 			System.out.println("===============================");
 			System.out.println("\t"+"구매요청이 완료되었습니다.");
 			System.out.println("===============================");

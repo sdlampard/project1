@@ -22,7 +22,7 @@ import java.util.Scanner;
 import oh.donghak.cellphone.java.Cart;
 import oh.donghak.cellphone.java.Customer;
 
-public class MemberList {
+public class MemberList{
 	
 	Scanner scan = new Scanner(System.in);
 	HashMap<String, Customer> memberList = new HashMap<> ();
@@ -62,6 +62,9 @@ public class MemberList {
 			
 			if(memberList.get(id).getPassword().equals(password)) {
 				System.out.println("=============================");
+				if(memberList.get(id).getRank().equals("VIP")){
+					System.out.println("\t"+ "VIP님 환영합니다.");
+				}
 				System.out.println("\t"+"로그인 되었습니다.");
 				System.out.println("=============================");
 				memberList.get(id).menu();
@@ -86,6 +89,8 @@ public class MemberList {
 					Customer customer = memberList.get(iter.next());
 					dos.writeUTF(customer.getId());
 					dos.writeUTF(customer.getPassword());
+					dos.writeUTF(customer.getRank());
+					dos.writeInt(customer.getCumulativeMoney());
 					
 					Cart cart = customer.getCart();
 					
@@ -127,8 +132,11 @@ public class MemberList {
 				while(true) {
 					String id = dis.readUTF();
 					String password = dis.readUTF();
-					
-					Customer customer = new Customer(id, password);
+					String rank = dis.readUTF();
+					int cumulativeMoney = dis.readInt();
+
+					Customer customer = new Customer(id, password,
+							rank, cumulativeMoney);
 					
 					char newLine = dis.readChar();
 					while(newLine == '\\') {
