@@ -157,7 +157,7 @@ public class Customer implements Guest{
 		
 		if(refundNum == 0)
 			return;
-		host.requestRefund(refundNum);
+		host.requestRefund(refundNum, this);
 	}
 	
 	// 비밀번호 변경

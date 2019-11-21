@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import oh.donghak.cellphone.java.Customer;
 import oh.donghak.cellphone.service.Host;
 
 public class HostLogin implements Host{
@@ -479,7 +480,7 @@ public class HostLogin implements Host{
 	}
 	
 	// 환불 요청
-	public void requestRefund(int refundNum) {
+	public void requestRefund(int refundNum, Customer customer) {
 		// 주문에 있는지 확인
 		if(refundNum == 0)
 			return;
@@ -492,12 +493,28 @@ public class HostLogin implements Host{
 				return;
 			}
 			orderList.get(refundNum).setRefundRequest(true);
-			System.out.println("===============================");
-			System.out.println("\t"+"환불 요청 되었습니다.");
-			System.out.println("===============================");
+			customer.setCumulativeMoney(customer.getCumulativeMoney()-
+					orderList.get(refundNum).getCellphone().getPrice() * 
+					orderList.get(refundNum).getCellphone().getAmount() );
+			
+			// 아직 결제 되지 않은 주문에 환불 요청이 들어왔을 때
 			if(orderList.get(refundNum).isRefundRequest() 
 					&& !orderList.get(refundNum).isSignCompelted()) {
+
+				if(phoneList.containsKey(orderList.get(refundNum).getCellphone().getRegiNum())){
+					// 환불된 물품들 다시 재고에 올리기
+					phoneList.get(orderList.get(refundNum).getCellphone().getRegiNum()).setAmount(
+							phoneList.get(orderList.get(refundNum).getCellphone().getRegiNum()).getAmount() 
+							+ orderList.get(refundNum).getCellphone().getAmount());
+				}
 				orderList.remove(refundNum);
+				System.out.println("===============================");
+				System.out.println("\t"+"주문이 취소 되었습니다.");
+				System.out.println("===============================");
+			}else {
+				System.out.println("===============================");
+				System.out.println("\t"+"환불 요청 되었습니다.");
+				System.out.println("===============================");
 			}
 			return;
 		}
