@@ -25,7 +25,8 @@ import oh.donghak.cellphone.java.Customer;
 public class MemberList{
 	
 	Scanner scan = new Scanner(System.in);
-	HashMap<String, Customer> memberList = new HashMap<> ();
+	
+	HashMap<String, Customer> memberList = new HashMap<> (); // 회원목록
 	
 	public MemberList() {}
 	

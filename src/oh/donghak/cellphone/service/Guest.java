@@ -16,6 +16,7 @@ public interface Guest {
 	void refund();
 	void menu();
 	
+	// 고객 메뉴
 	public default int customerMenu() {
 		System.out.println("------------------------고객 메뉴-----------------------");
 		System.out.println("1.장바구니     2.구매     3.환불     4.비밀번호 변경    5.구매금액    6.로그아웃");

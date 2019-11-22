@@ -17,11 +17,11 @@ public class Customer implements Guest{
 	
 	HostLogin host = HostLogin.getInstance();
 	
-	private String id;
-	private String password;
-	private String rank = NEW;
-	private int cumulativeMoney = 0;
-	Cart cart = new Cart();
+	private String id;  // 아이디
+	private String password; // 비밀번호
+	private String rank = NEW; // 등급
+	private int cumulativeMoney = 0; // 누적구매금액
+	Cart cart = new Cart(); //카트
 	
 	public Customer() {}
 	
@@ -88,6 +88,7 @@ public class Customer implements Guest{
 		if(phone==0)
 			return;
 		
+		//수량 입력
 		System.out.print("수량을 입력하세요 : ");
 		int buyAmount = 0;
 		String amountStr = scan.next();
@@ -116,19 +117,22 @@ public class Customer implements Guest{
 				host.getPhoneList().get(phone).getBrand(), host.getPhoneList().get(phone).getModelName(), 
 				host.getPhoneList().get(phone).getPrice(), buyAmount);
 
+			// vip 할인
 			if(this.getCumulativeMoney()>VIP_LEVEL) {
 				buyNowPhone.setPrice((int)(buyNowPhone.getPrice()*0.95));
 				System.out.println("VIP님 감사드립니다 소정의 할인을 해드렸습니다.");
 			}
-			
+
+			// 주문리스트에 올리기
 			host.getOrderList().add(new Order(buyNowPhone,id));
 			
+			// 누적금액
 			this.setCumulativeMoney(this.getCumulativeMoney() + host.getPhoneList().get(phone).getPrice() * buyAmount);
 
+			// 등급 지정
 			if(this.getCumulativeMoney()>VIP_LEVEL) {
 				this.setRank(VIP);;
 			}
-			
 			
 			host.getPhoneList().get(phone).setAmount(host.getPhoneList().get(phone).getAmount()-buyAmount);
 			
@@ -162,13 +166,13 @@ public class Customer implements Guest{
 	
 	// 비밀번호 변경
 	public void changePassword() {
-		System.out.print("현재 비밀번호를 입력해주세요");
+		System.out.print("현재 비밀번호를 입력해주세요 : ");
 		String currentPassword = scan.next();
 		if(!currentPassword.equals(password)) {
 			System.out.println("비밀번호가 틀렸습니다.");
 			return;
 		}
-		System.out.print("변경하실 비밀번호를 입력해주세요");
+		System.out.print("변경하실 비밀번호를 입력해주세요 : ");
 		String newPasword = scan.next();
 		setPassword(newPasword);
 	}
@@ -194,7 +198,7 @@ public class Customer implements Guest{
 						break;
 					case 3: // 구매
 						cart.showAllCart();
-						cart.buyCart(id);
+						cart.buyCart(id,this);
 						break;
 					case 4: // 목록
 						cart.showAllCart();

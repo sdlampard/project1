@@ -2,6 +2,9 @@
  * 작성일: 20191118
  * 작성자: 오동학
  * 개요: 관리자 로그인
+ * 
+ * 수정일: 20191118
+ * 		Order와 재고리스트 hostLogin 안으로 가져옴
  */
 package oh.donghak.cellphone.domain;
 
@@ -25,9 +28,9 @@ public class HostLogin implements Host{
 	
 	private static HostLogin host = new HostLogin();
 
-	private Map<Integer, Cellphone> phoneList;
-	private List<Order> orderList;
-	private long profit = 0;
+	private Map<Integer, Cellphone> phoneList; // 재고리스트
+	private List<Order> orderList; // 주문리스트
+	private long profit = 0; // 결산
 	
 	public Map<Integer, Cellphone> getPhoneList() {
 		return phoneList;
@@ -87,6 +90,10 @@ public class HostLogin implements Host{
 		int regiNum = 0;
 		try {
 			regiNum = Integer.parseInt(regi);
+			if(regiNum < 1) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch (NumberFormatException e) {
 			System.out.println("숫자를 입력해주세요");
 			return;
@@ -103,6 +110,10 @@ public class HostLogin implements Host{
 		int price = 0;
 		try {
 			price = Integer.parseInt(priceStr);
+			if(price < 0) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch (NumberFormatException e) {
 			System.out.println("숫자를 입력해주세요");
 			return;
@@ -112,6 +123,10 @@ public class HostLogin implements Host{
 		int amount = 0;
 		try {
 			amount = Integer.parseInt(amountStr);
+			if(amount < 0) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch (NumberFormatException e) {
 			System.out.println("숫자를 입력해주세요");
 			return;
@@ -143,6 +158,10 @@ public class HostLogin implements Host{
 		// 숫자만 입력되게 예외처리
 		try {
 			delNum = scan.nextInt();
+			if(delNum < 0) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch(InputMismatchException e) {
 			System.out.println("숫자만 입력해주세요 제발!");
 		}
@@ -174,6 +193,10 @@ public class HostLogin implements Host{
 		// 숫자만 입력되게 예외처리
 		try {
 			num = scan.nextInt();
+			if(num < 0) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch(InputMismatchException e) {
 			System.out.println("숫자만 입력해주세요 제발!");
 		}
@@ -288,68 +311,6 @@ public class HostLogin implements Host{
 		}
 	}
 
-	// 메뉴
-	public void menu() throws IOException {
-		int menu = 0;
-		do {
-			menu = 0;
-			menu = managerMenu();
-			
-			switch(menu) {
-			case 1:	// 재고관리
-				int stockMenu = 0;
-				do {
-					stockMenu = stockMenu();
-					switch(stockMenu) {
-					case 1: // 목록
-						showAllStacks();
-						break;
-					case 2: // 추가
-						addCellphone();
-						break;
-					case 3: // 수정
-						editCellphone();
-						break;
-					case 4: // 삭제
-						removePhone();
-						break;
-					case 5: // 수량만 추가
-						showAllStacks();
-						morePhones();
-						break;
-					}
-				}while( stockMenu != 6);
-				break;
-			case 2:	//주문관리
-				int orderMenu = 0;
-				do {
-					orderMenu = 0;
-					orderMenu = orderMenu();
-					switch(orderMenu) {
-					case 1: // 주문목록
-						showAllOrders();
-						break;
-					case 2:  // 결제승인
-						approveOrder();
-						break;
-					case 3:  // 결제취소
-						cancelOrder();
-						break;
-					case 4: // 결산
-						getProfit();
-						break;
-				}
-				}while(orderMenu != 5);
-				break;
-				
-			case 3:
-				//로그아웃
-				break;
-			}
-		}while(menu != 3);
-		return;
-	}
-	
 	// 전체 주문 목록
 	public void showAllOrders() {
 		if(orderList.size() == 0) {
@@ -382,6 +343,10 @@ public class HostLogin implements Host{
 		String orderStr = scan.next();
 		try {
 			orderNum = Integer.parseInt(orderStr);
+			if(orderNum < 0) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch(NumberFormatException e) {
 			System.out.println("숫자만 입력해주세요 제발!");
 			System.out.println();
@@ -425,6 +390,10 @@ public class HostLogin implements Host{
 		String orderStr = scan.next();
 		try {
 			orderNum = Integer.parseInt(orderStr);
+			if(orderNum < 0) {
+				System.out.println("양심은 어디에 두셨습니까?");
+				return;
+			}
 		} catch(NumberFormatException e) {
 			System.out.println("숫자만 입력해주세요 제발!");
 		}
@@ -452,7 +421,6 @@ public class HostLogin implements Host{
 					phoneList.get(order.getCellphone().getRegiNum()).setAmount(
 							phoneList.get(order.getCellphone().getRegiNum()).getAmount() 
 							+ orderList.get(orderNum).getCellphone().getAmount());
-
 				}
 				// 주문에서 삭제
 				orderList.remove(orderNum);
@@ -527,6 +495,69 @@ public class HostLogin implements Host{
 	public void addOrder(Order order) {
 		orderList.add(order);
 	}
+	
+	// 메뉴
+	public void menu() throws IOException {
+		int menu = 0;
+		do {
+			menu = 0;
+			menu = managerMenu();
+			
+			switch(menu) {
+			case 1:	// 재고관리
+				int stockMenu = 0;
+				do {
+					stockMenu = stockMenu();
+					switch(stockMenu) {
+					case 1: // 목록
+						showAllStacks();
+						break;
+					case 2: // 추가
+						addCellphone();
+						break;
+					case 3: // 수정
+						editCellphone();
+						break;
+					case 4: // 삭제
+						removePhone();
+						break;
+					case 5: // 수량만 추가
+						showAllStacks();
+						morePhones();
+						break;
+					}
+				}while( stockMenu != 6);
+				break;
+			case 2:	//주문관리
+				int orderMenu = 0;
+				do {
+					orderMenu = 0;
+					orderMenu = orderMenu();
+					switch(orderMenu) {
+					case 1: // 주문목록
+						showAllOrders();
+						break;
+					case 2:  // 결제승인
+						approveOrder();
+						break;
+					case 3:  // 결제취소
+						cancelOrder();
+						break;
+					case 4: // 결산
+						getProfit();
+						break;
+				}
+				}while(orderMenu != 5);
+				break;
+				
+			case 3:
+				//로그아웃
+				break;
+			}
+		}while(menu != 3);
+		return;
+	}
+	
 
 	// 주문 저장
 	public void saveOrders() {

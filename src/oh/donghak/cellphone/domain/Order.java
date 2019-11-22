@@ -6,11 +6,12 @@
 package oh.donghak.cellphone.domain;
 
 public class Order {
-	private Cellphone phone;
-	private String userId = null;;
-	private boolean refundRequest = false;
-	private boolean refundComplete = false;
-	private boolean signCompelted = false;
+	
+	private Cellphone phone; // 헨드폰
+	private String userId = null;; // 사용자id
+	private boolean refundRequest = false; // 환불요청
+	private boolean refundComplete = false; // 환불완료
+	private boolean signCompelted = false; // 결제완료
 	
 	public Order() {}
 
